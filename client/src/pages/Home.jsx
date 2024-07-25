@@ -17,7 +17,7 @@ export default function Home() {
         async function fetchBalance() {
             if (user?.ethereum_wallet) {
                 try {
-                    const response = await axios.get(`https://api.etherscan.io/api?module=account&action=balance&address=${user.ethereum_wallet}&tag=latest&apikey=FXZ9HHQF6ZURCFK9ES8C9FSDZP1BQDF1GF`)
+                    const response = await axios.get(`https://api.etherscan.io/api?module=account&action=balance&address=${user.ethereum_wallet}&tag=latest&apikey=${process.env.REACT_APP_ETHERSCAN_API_KEY}`)
                     setBalance(response.data.result)
                 } catch (error) {
                     console.error("Error fetching balance:", error)
