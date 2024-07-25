@@ -4,12 +4,11 @@ from django.contrib.auth import get_user_model
 
 
 class RegistrationSerializer(serializers.ModelSerializer):
-
     password2 = serializers.CharField(style={"input_type": "password"})
 
     class Meta:
         model = get_user_model()
-        fields = ("first_name", "last_name", "email", "password", "password2")
+        fields = ("first_name", "last_name", "email", "password", "password2", "ethereum_wallet")  # Add ethereum_wallet
         extra_kwargs = {
             "password": {"write_only": True},
             "password2": {"write_only": True}
@@ -20,14 +19,14 @@ class RegistrationSerializer(serializers.ModelSerializer):
             email=self.validated_data["email"],
             first_name=self.validated_data["first_name"],
             last_name=self.validated_data["last_name"],
+            ethereum_wallet=self.validated_data.get("ethereum_wallet") # Added Registration Serializer for Wallet Address
         )
 
         password = self.validated_data["password"]
         password2 = self.validated_data["password2"]
 
         if password != password2:
-            raise serializers.ValidationError(
-                {"password": "Passwords do not match!"})
+            raise serializers.ValidationError({"password": "Passwords do not match!"})
 
         user.set_password(password)
         user.save()
@@ -44,4 +43,4 @@ class LoginSerializer(serializers.Serializer):
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = get_user_model()
-        fields = ("id", "email", "is_staff", "first_name", "last_name")
+        fields = ("id", "email", "is_staff", "first_name", "last_name", "ethereum_wallet") # Added new field for the Ethereum Wallet
